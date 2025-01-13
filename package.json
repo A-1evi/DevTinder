@@ -4,12 +4,13 @@
   "description": "devtiner for devs",
   "main": "index.js",
   "scripts": {
-   "dev":"nodemon src/app.js",
+    "dev": "nodemon src/app.js",
     "start": "node src/app.js"
   },
   "author": "Alankar Singh",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongoose": "^8.9.2"
   }
