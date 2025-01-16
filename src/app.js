@@ -46,15 +46,15 @@ app.post("/login", async (req, res) => {
     if (!user) {
       throw new Error("Invalid credentials");
     }
-    const ispasswordMatch = await bcrypt.compare(password, user.password);
+    const ispasswordMatch = await user.matchPassword(password);
     if (!ispasswordMatch) {
       throw new Error("Invalid credentials");
     } else {
-      const token = await jwt.sign({ _id: user._id }, "devTinder@321", {
-        expiresIn: "7d",
-      });
+      const token = await user.getJWT();
 
-      res.cookie("token", token, { expires: new Date(Date.now + 8 * 3600000) }); // coookie expires in 8 hrs;
+      res.cookie("token", token, {
+        expires: new Date(Date.now() + 8 * 3600000),
+      }); // coookie expires in 8 hrs;
       res.send("login succesful");
     }
   } catch (error) {
