@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 const userSchema = new mongoose.Schema(
   {
@@ -23,11 +24,16 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 8,
+      validate(value) {
+        if (!validator.isStrongPassword(value)) {
+          throw new Error("Enter a strong password"); 
+        }
+      },
     },
     bio: {
       type: String,
       maxlength: 400,
-      default:"No bio added yet"
+      default: "No bio added yet",
     },
     age: {
       type: Number,
