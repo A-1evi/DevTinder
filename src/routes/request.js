@@ -26,10 +26,11 @@ requestRouter.post(
           { fromUserId: toUserId, toUserId: fromUserId },
         ],
       });
-      if(existingConnectionRequest){
-        return res.status(400).json({message: "Connection request already exist!!"})
+      if (existingConnectionRequest) {
+        return res
+          .status(400)
+          .json({ message: "Connection request already exist!!" });
       }
-      
 
       const connectionRequest = new ConnectionRequest({
         fromUserId,
@@ -47,4 +48,29 @@ requestRouter.post(
   }
 );
 
+requestRouter.post(
+  "/profile/review/:status/:requestId",
+  userAuth,
+  async (req, res) => {
+    const loggedInUser = req.user;
+    const allowedStatus = ["accepted", "rejected"];
+    const { status, requestId } = req.params;
+
+    if (!allowedStatus.includes(status)) {
+      return res.json({ message: "Invalid status" }, status);
+    }
+    const connectionRequest = await ConnectionRequest.findOne({
+      _id: requestId,
+      toUserId: loggedInUser,
+      status: "interested",
+    });
+    if (!connectionRequest) {
+      return res.status(400).send("No connection request found");
+    }
+    connectionRequest.status = status;
+
+    const data = await connectionRequest.save();
+    res.json({ message: "Connection request " + status, data });
+  }
+);
 module.exports = requestRouter;
