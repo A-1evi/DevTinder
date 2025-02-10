@@ -55,14 +55,14 @@ const userSchema = new mongoose.Schema(
         "https://img.freepik.com/free-psd/3d-icon-social-media-app_23-2150049569.jpg?t=st=1736435336~exp=1736438936~hmac=d5769f21a962d71394dff414582f32966044ca7512585c49e21a2b190b85e45c&w=740",
     },
     skills: {
-      type: [String], 
+      type: [String],
     },
   },
   { timestamps: true }
 );
 userSchema.methods.getJWT = async function () {
   const user = this;
-  const token = await jwt.sign({ _id: user._id }, "devTinder@321", {
+  const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, {
     expiresIn: "7d",
   });
   return token;
