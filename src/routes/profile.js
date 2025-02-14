@@ -33,9 +33,9 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
 
 profileRouter.patch("/profile/changePassword", userAuth, async (req, res) => {
   const { currentPassword, newPassword } = req.body;
-  console.log(req.body);
+ 
   const user = req.user;
-  console.log(user);
+
   try {
     const isPasswordMatch = await user.matchPassword(currentPassword);
     if (!isPasswordMatch) {

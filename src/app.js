@@ -8,6 +8,11 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 const cors = require("cors");
+const http = require("http");
+const { initializeSocket } = require("./utils/socket");
+const chatRouter = require("./routes/chat");
+const server = http.createServer(app);
+
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -21,11 +26,13 @@ app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
+app.use("/", chatRouter);
 
+initializeSocket(server);
 connectDB()
   .then(() => {
     console.log("Database connected");
-    app.listen(process.env.PORT, () => {
+    server.listen(process.env.PORT, () => {
       console.log("Server is started on port 3000");
     });
   })

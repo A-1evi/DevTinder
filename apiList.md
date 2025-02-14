@@ -26,3 +26,4 @@
 - GET /user/feed
 
 
+# check local env variable and .env.production 
