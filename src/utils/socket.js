@@ -19,7 +19,6 @@ const initializeSocket = (server) => {
   io.on("connection", (socket) => {
     socket.on("joinChat", ({ firstName, lastName, targetId, userId }) => {
       const roomId = secretRoomId(userId, targetId);
-      console.log(firstName + " joined room " + roomId);
       socket.join(roomId);
     });
     socket.on(
@@ -27,15 +26,7 @@ const initializeSocket = (server) => {
       async ({ firstName, lastName, userId, targetId, message }) => {
         try {
           const roomId = secretRoomId(userId, targetId);
-          console.log(
-            firstName +
-              " sent" +
-              message +
-              " to " +
-              targetId +
-              " in room " +
-              roomId
-          );
+          
 
           let chat = await Chat.findOne({
             participants: { $all: [userId, targetId] },
