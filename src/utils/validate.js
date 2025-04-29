@@ -1,10 +1,10 @@
 const validator = require("validator");
 
 const validateSignUpData = (req) => {
-  const { email, password, firstName, lastName } = req.body;
-  if (!email || !password || !firstName || !lastName) {
+  const { emailId, password, firstName, lastName } = req.body;
+  if (!emailId || !password || !firstName || !lastName) {
     throw new Error("Missing required fields");
-  } else if (!validator.isEmail(email)) {
+  } else if (!validator.isEmail(emailId)) {
     throw new Error("Email is not valid");
   } else if (!validator.isStrongPassword(password)) {
     throw new Error("Password is not strong");

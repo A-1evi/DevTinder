@@ -11,6 +11,7 @@ const cors = require("cors");
 const http = require("http");
 const { initializeSocket } = require("./utils/socket");
 const chatRouter = require("./routes/chat");
+const morgan = require("morgan");
 const server = http.createServer(app);
 
 app.use(
@@ -21,6 +22,7 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
+app.use(morgan("combined"));
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
@@ -33,7 +35,7 @@ connectDB()
   .then(() => {
     console.log("Database connected");
     server.listen(process.env.PORT, () => {
-      console.log("Server is started on port 3000");
+      console.log(`Server is started on port ${process.env.PORT}`);
     });
   })
   .catch((error) => {
