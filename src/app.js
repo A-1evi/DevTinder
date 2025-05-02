@@ -12,6 +12,8 @@ const http = require("http");
 const { initializeSocket } = require("./utils/socket");
 const chatRouter = require("./routes/chat");
 const morgan = require("morgan");
+const connectRedis = require("./utils/redisClient");
+const postRouter = require("./routes/post");
 const server = http.createServer(app);
 
 app.use(
@@ -29,6 +31,21 @@ app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
 app.use("/", chatRouter);
+
+async function initalizeRedis() {
+  const redisClient = await connectRedis();
+
+  app.use(
+    "/post",
+    (req, res, next) => {
+      req.redisClient = redisClient;
+      next();
+    },
+    postRouter
+  );
+}
+
+initalizeRedis();
 
 initializeSocket(server);
 connectDB()
