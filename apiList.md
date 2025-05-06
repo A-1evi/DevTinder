@@ -26,4 +26,11 @@
 - GET /user/feed
 
 
+## PostRouter
+- GET /post/all
+- GET /:user/post
+- GET /profile/post
+- POST /create
+
+
 # check local env variable and .env.production 
