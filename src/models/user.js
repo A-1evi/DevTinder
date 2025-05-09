@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema(
     gender: {
       type: String,
       validate(value) {
-        if (!["male", "female", "others"].includes(value)) {
+        if (!["Male", "Female", "Others"].includes(value)) {
           throw new Error("Gender data is not valid");
         }
       },
@@ -56,6 +56,42 @@ const userSchema = new mongoose.Schema(
     },
     skills: {
       type: [String],
+    },
+    title: {
+      type: String,
+      maxlength: 100,
+    },
+    languages: {
+      type: [String],
+      default: [],
+    },
+    frameworks: {
+      type: [String],
+      default: [],
+    },
+    githubUrl: {
+      type: String,
+      validate(value) {
+        if (value && !validator.isURL(value)) {
+          throw new Error("Invalid GitHub URL");
+        }
+      },
+    },
+    linkedinUrl: {
+      type: String,
+      validate(value) {
+        if (value && !validator.isURL(value)) {
+          throw new Error("Invalid LinkedIn URL");
+        }
+      },
+    },
+    portfolio: {
+      type: String,
+      validate(value) {
+        if (value && !validator.isURL(value)) {
+          throw new Error("Invalid Portfolio URL");
+        }
+      },
     },
   },
   { timestamps: true }
