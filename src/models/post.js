@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const User = require("./user");
 
 const postSchema = new mongoose.Schema(
@@ -15,7 +15,7 @@ const postSchema = new mongoose.Schema(
     },
     codeSnippet: {
       type: String,
-      default: '',
+      default: "",
     },
     tags: {
       type: [String],
@@ -24,23 +24,33 @@ const postSchema = new mongoose.Schema(
         validator: function (v) {
           return v.length <= 3; // Limit the number of tags
         },
-        message: 'A post can have a maximum of 3 tags.',
+        message: "A post can have a maximum of 3 tags.",
       },
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', // Assuming you have a User model
+      ref: "User", // Assuming you have a User model
       required: true,
     },
-    likes: {
-      type: Number,
-      default: 0,
-    },
+    likes: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+        totalLikes: { type: Number, default: 0 },
+      },
+    ],
     comments: [
       {
         user: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
+          ref: "User",
           required: true,
         },
         content: {
@@ -53,7 +63,6 @@ const postSchema = new mongoose.Schema(
         },
       },
     ],
-    
 
     createdAt: {
       type: Date,
@@ -76,6 +85,6 @@ const postSchema = new mongoose.Schema(
   }
 );
 
-const Post = mongoose.model('Post', postSchema);
+const Post = mongoose.model("Post", postSchema);
 
 module.exports = Post;
