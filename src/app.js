@@ -16,9 +16,24 @@ const connectRedis = require("./utils/redisClient");
 const postRouter = require("./routes/post");
 const server = http.createServer(app);
 
+// Configure CORS properly. Do NOT use `location` (browser global) on the server.
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "https://devtinder-web-zeta.vercel.app",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: "https://devtinder-web-zeta.vercel.app",
+    origin: function (origin, callback) {
+      // Allow requests with no origin (e.g., mobile apps, curl)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        return callback(null, true);
+      }
+      return callback(new Error("CORS policy: This origin is not allowed."));
+    },
     credentials: true,
   })
 );
